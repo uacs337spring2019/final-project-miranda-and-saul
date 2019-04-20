@@ -20,7 +20,29 @@ function fillCheckboxes(){
 
 			})
 }
-
+function makeChecklist(lis){
+	for(i=0;i<lis.length;i++){
+		let bar = document.createElement("div");
+		bar.className = "check"
+		bar.idName = lis[i];
+		let d_name = lis[i];
+		let id_name = lis[i].replace(" ","");
+		bar.innerHTML = "<input type='checkbox' name='attendance' id="+id_name+" value="+d_name+" />";
+		document.getElementById("checkboxes").appendChild(bar);
+	}
+}
+function initialList(){
+	let url = 
+	fetch(url)
+			.then(checkStatus)
+		    .then(function(responseText) {
+				let lis = JSON.parse(responseText);
+		        
+		    })
+		    .catch(function(error) {
+		        document.getElementById("errors").innerHTML="Page not found";
+		});
+}
 function checkStatus(response) {
 	if (response.status >= 200 && response.status < 300) {
 		return response.text();
