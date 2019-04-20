@@ -10,6 +10,7 @@
 
 	window.onload = function(){
 		fillCheckboxes();
+		document.getElementById("submitrole").onclick = getCheckIn;
 	}
 
 function fillCheckboxes(){
@@ -19,6 +20,19 @@ function fillCheckboxes(){
 			.then(function(responseText){
 
 			})
+}
+
+function getCheckIn(){
+	let checkedB = [];
+	let checkboxes = document.querySelectorAll(".cb");
+	for(let i = 0; i < checkboxes.length; i++){
+		if(checkboxes[i].checked){
+			checkedB.push(i);
+		}
+	}
+	checkedB.forEach(function (e){
+		alert(e);
+	});
 }
 
 function checkStatus(response) {
