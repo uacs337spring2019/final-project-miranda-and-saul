@@ -8,6 +8,7 @@
 
 #quorum{
 	font-size: 45pt;
+	color: green;
 }
 
 #outofroom{
@@ -17,4 +18,5 @@
 #outofroom span{
 	font-weight: bold;
 	margin-left: 20px;
+	margin-right: 20px;
 }
