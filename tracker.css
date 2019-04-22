@@ -1,9 +1,51 @@
+body{
+	background-color: #EDEAB5;
+	color: #8B0000;
+	margin: 0;
+}
+#coa{
+	position: fixed;
+	width: 80px;
+	right: 15px;
+	bottom: 15px;
+}
+#banner{
+	background-color: #FFCC33;
+	font-size: 50pt;
+	text-align: center;
+	border-bottom: solid 2px #8B0000;
+}
+
+#banner img{
+	width: 10%;
+	vertical-align: bottom;
+}
+
+#main{
+	display: flex;
+	justify-content: space-between;
+	margin: 10px;
+}
 #dropdown{
 	display: none;
 }
 
 #quorum{
-	position: absolute;
-	right: 10px;
 	font-size: 45pt;
+	color: green;
+}
+
+#outofroom{
+	font-size: 20pt;
+}
+
+#outofroom span{
+	font-weight: bold;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+button{
+	padding: 5px;
+	border-radius: 10px;
 }
