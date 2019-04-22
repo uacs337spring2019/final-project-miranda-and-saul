@@ -30,7 +30,6 @@ console.log('web service started');
 app.get('/', function (req, res) {
 	
 	res.header("Access-Control-Allow-Origin", "*");
-	let title = req.query.title;
 	let mode = req.query.mode;
 
 	if(mode == undefined) {
@@ -45,8 +44,8 @@ app.get('/', function (req, res) {
 		let file_name =  "roster.txt";
 		let info_data = read_file(file_name);
 		output = parse_info(info_data);
-		console.log(output);
-		//console.log(info_data);
+		res.send(JSON.stringify(output));
+		
 	}
 	
 

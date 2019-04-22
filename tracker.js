@@ -9,7 +9,9 @@
 	"use strict";
 
 	window.onload = function(){
-		fillCheckboxes();
+
+		initialList();
+		//fillCheckboxes();
 	}
 
 function fillCheckboxes(){
@@ -21,26 +23,30 @@ function fillCheckboxes(){
 			})
 }
 function makeChecklist(lis){
-	for(i=0;i<lis.length;i++){
+	for(let i=0;i<lis.length;i++){
 		let bar = document.createElement("div");
 		bar.className = "check"
-		bar.idName = lis[i];
+		
 		let d_name = lis[i];
 		let id_name = lis[i].replace(" ","");
-		bar.innerHTML = "<input type='checkbox' name='attendance' id="+id_name+" value="+d_name+" />";
+		bar.idName = id_name;
+		bar.innerHTML = "<input type='checkbox' name='attendance' id="+id_name+" value="+d_name+" />"+"\n"+d_name;
 		document.getElementById("checkboxes").appendChild(bar);
 	}
 }
 function initialList(){
-	let url = 
+
+	let url = "http://localhost:3000/?mode=initial";
 	fetch(url)
 			.then(checkStatus)
 		    .then(function(responseText) {
+		    	console.log("here");
 				let lis = JSON.parse(responseText);
-		        
+				console.log(lis);
+		        makeChecklist(lis);
 		    })
 		    .catch(function(error) {
-		        document.getElementById("errors").innerHTML="Page not found";
+		        console.log("Blunder");
 		});
 }
 function checkStatus(response) {
