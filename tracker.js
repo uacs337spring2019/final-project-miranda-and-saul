@@ -129,6 +129,51 @@
 			})
 	}
 
+function personleft(){
+	let child = document.getElementById("quorum").firstElementChild;
+	child.id = parseInt(child.id) - 1;
+	child.innerHTML = parseInt(child.id);
+	let person = document.getElementById("current").value;
+	let now = new Date();
+	let untilmin = new Date(now.getTime() + 10*60000);
+	let e = document.getElementById("outofroom");
+	let len = e.childNodes.length;
+	untilmin = untilmin.getTime();
+	let timer = setInterval(function(){
+		let curr = new Date().getTime();
+		let amt = untilmin - curr;
+		let min = Math.floor((amt%(3600000))/(60000));
+		let div = document.getElementById("person" + person.replace(" ", ""));
+		if(div != null){
+			let span = document.getElementById("span" + person.replace(" ", ""));
+			span.innerHTML = min + " m";
+			if(min > 1 && min < 5)
+				span.style.color = "#ffcc99";
+			else if(min > 0 && min < 2)
+				span.style.color = "#ff0000";
+
+		}
+		else{
+			div = document.createElement("div");
+			div.id = "person" + person.replace(" ", "");
+			div.innerHTML = person;
+			let span = document.createElement("span");
+			span.id = "span" + person.replace(" ", "");
+			span.innerHTML = min + " m";
+			div.appendChild(span);
+			let btn = document.createElement("button");
+			btn.innerHTML = "Check Back In"; 
+			e.appendChild(div);
+		}
+		if(min < 0){
+			clearInterval(timer);
+		}
+
+	}, 1000);
+
+
+}
+
 function makeChecklist(lis){
 	for(let i=0;i<lis.length;i++){
 		let bar = document.createElement("div");
