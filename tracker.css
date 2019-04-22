@@ -1,0 +1,9 @@
+#dropdown{
+	display: none;
+}
+
+#quorum{
+	position: absolute;
+	right: 10px;
+	font-size: 45pt;
+}
