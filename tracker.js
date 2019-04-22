@@ -15,13 +15,26 @@
 		document.getElementById("personleft").onclick = personleft;
 		document.getElementById("lateperson").onclick = redisplay;
 		document.getElementById("resubmitrole").onclick = addLateBrother;
-
 	}
+
 	function redisplay(){
 		document.getElementById("init").style.display = "none";
 		document.getElementById("dropdown").style.display = "none";
 		document.getElementById("latelist").style.display = "inline";
 	}
+
+	function checkQuorum(){
+		let e = document.getElementById("quorum").firstElementChild;
+		let q = parseInt(e.id);
+		if(q < 41)
+			e.style.color = "#ff0000";
+		else
+			e.style.color = "#00f21c";
+
+
+
+	}
+
 	function addLateBrother(){
 		let bigList = [];
 		let checkedB = [];
@@ -48,6 +61,7 @@
 				notChecked.push(lVal);
 			}
 		}
+
 		let child = document.getElementById("quorum").firstElementChild;
 		let toAdd = checkedB.length;
 		console.log(toAdd);
@@ -78,6 +92,7 @@
 				alert("something happened");
 
 			})
+	checkQuorum();
 
 	}
 	function getCheckIn(){
@@ -127,26 +142,30 @@
 				alert("something happened");
 
 			})
+	checkQuorum();
 	}
 
 function personleft(){
 	let child = document.getElementById("quorum").firstElementChild;
 	child.id = parseInt(child.id) - 1;
 	child.innerHTML = parseInt(child.id);
-	let person = document.getElementById("current").value;
+	let select = document.getElementById("current");
+	let person = select.value;
+	select.remove(select.selectedIndex);
 	let now = new Date();
 	let untilmin = new Date(now.getTime() + 10*60000);
 	let e = document.getElementById("outofroom");
 	let len = e.childNodes.length;
 	untilmin = untilmin.getTime();
-	let timer = setInterval(function(){
+	window.timer = setInterval(function(){
 		let curr = new Date().getTime();
 		let amt = untilmin - curr;
 		let min = Math.floor((amt%(3600000))/(60000));
+		let sec = Math.floor((amt%60000)/1000);
 		let div = document.getElementById("person" + person.replace(" ", ""));
 		if(div != null){
 			let span = document.getElementById("span" + person.replace(" ", ""));
-			span.innerHTML = min + " m";
+			span.innerHTML = min + " m " + sec + " s";
 			if(min > 1 && min < 5)
 				span.style.color = "#ffcc99";
 			else if(min > 0 && min < 2)
@@ -159,10 +178,13 @@ function personleft(){
 			div.innerHTML = person;
 			let span = document.createElement("span");
 			span.id = "span" + person.replace(" ", "");
-			span.innerHTML = min + " m";
+			span.innerHTML = min + " m " + sec + " s";
 			div.appendChild(span);
 			let btn = document.createElement("button");
 			btn.innerHTML = "Check Back In"; 
+			btn.value = person;
+			btn.addEventListener("click", checkBackIn);
+			div.appendChild(btn);
 			e.appendChild(div);
 		}
 		if(min < 0){
@@ -170,9 +192,23 @@ function personleft(){
 		}
 
 	}, 1000);
+	checkQuorum();
 
 
 }
+
+function checkBackIn(){
+	let personVal = this.value;
+	let option = document.createElement("option");
+	option.text = personVal;
+	option.value = personVal;
+	document.getElementById("current").add(option);
+	let e = document.getElementById("person" + personVal.replace(" ", ""));
+	e.parentNode.removeChild(e);
+	clearInterval(timer);
+	checkQuorum();
+}
+
 
 function makeChecklist(lis){
 	for(let i=0;i<lis.length;i++){
@@ -182,6 +218,7 @@ function makeChecklist(lis){
 		let val = whole[whole.length - 1];
 		bar.idName = lis[i];
 		let d_name = whole.slice(0,whole.length-1).join(" ");
+		d_name = d_name.replace(/\uFEFF/g,"");
 		bar.innerHTML = "<input type='checkbox' name='attendance' id='"+val+"'' value='"+d_name+"'' class='cb' />" + d_name;
 		document.getElementById("checkboxes").appendChild(bar);
 	}
