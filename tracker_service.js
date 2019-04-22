@@ -46,6 +46,7 @@ app.get('/', function (req, res) {
 		let info_data = read_file(file_name);
 		output = parse_info(info_data);
 		console.log(output);
+		res.send(JSON.stringify(output));
 		//console.log(info_data);
 	}
 	
@@ -53,5 +54,36 @@ app.get('/', function (req, res) {
 
 	
 })
+
+
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
+	next();
+});
+
+
+app.post('/', jsonParser, function (req, res) {
+	fs.writeFile("checkedIn.txt", "", function(err) {
+		console.log("cleared");
+	});
+
+	for(let i =0; i < req.body.length; i++){
+		let email = req.body[i].email;
+		let name = req.body[i].name;
+		let inp = "\r\n" + name + ":::" + email;	
+		console.log(inp);
+		fs.appendFile("checkedIn.txt", inp, function(err) {
+		
+	});
+	}
+
+
+
+
+});
 
 app.listen(3000);
