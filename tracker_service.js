@@ -30,7 +30,6 @@ console.log('web service started');
 app.get('/', function (req, res) {
 	
 	res.header("Access-Control-Allow-Origin", "*");
-	let title = req.query.title;
 	let mode = req.query.mode;
 
 	if(mode == undefined) {
@@ -45,9 +44,8 @@ app.get('/', function (req, res) {
 		let file_name =  "roster.txt";
 		let info_data = read_file(file_name);
 		output = parse_info(info_data);
-		console.log(output);
 		res.send(JSON.stringify(output));
-		//console.log(info_data);
+		
 	}
 	
 
@@ -67,16 +65,34 @@ app.use(function(req, res, next) {
 
 
 app.post('/', jsonParser, function (req, res) {
-	fs.writeFile("checkedIn.txt", "", function(err) {
+	res.header("Access-Control-Allow-Origin", "*");
+	let mode = req.query.mode;
+	if(mode != "update"){
+		fs.writeFile("checkedIn.txt", "", function(err) {
 		console.log("cleared");
 	});
+	}
+	
+	fs.writeFile('lateBros.txt', "", function(){console.log('done')});
 
-	for(let i =0; i < req.body.length; i++){
-		let email = req.body[i].email;
-		let name = req.body[i].name;
+	for(let i =0; i < req.body[0].length; i++){
+		let email = req.body[0][i].email;
+		let name = req.body[0][i].name;
 		let inp = "\r\n" + name + ":::" + email;	
-		console.log(inp);
+		//console.log(inp);
 		fs.appendFile("checkedIn.txt", inp, function(err) {
+
+		
+	});
+	}
+
+	for(let j =0; j < req.body[1].length; j++){
+		let mail = req.body[1][j].email;
+		let nme = req.body[1][j].name;
+		let np = "\r\n" + nme + ":::" + mail;	
+		console.log(np);
+		fs.appendFile("lateBros.txt", np, function(err) {
+	
 		
 	});
 	}
