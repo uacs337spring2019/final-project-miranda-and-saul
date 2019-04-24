@@ -2,6 +2,10 @@ body{
 	background-color: #EDEAB5;
 	color: #8B0000;
 	margin: 0;
+	font-size: 16pt;
+}
+input{
+	zoom: 1.5;
 }
 #coa{
 	position: fixed;
