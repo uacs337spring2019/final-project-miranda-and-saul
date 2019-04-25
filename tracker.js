@@ -98,7 +98,7 @@
 		let checkboxes = document.querySelectorAll(".cb");
 		for(let i = 0; i < checkboxes.length; i++){
 			if(checkboxes[i].checked){
-				ret += "<option id='" + checkboxes[i].value.replace(" ", "") + "' value='0'>" + checkboxes[i].value + "</option>";
+				ret += "<option class='present' id='" + checkboxes[i].value.replace(" ", "") + "' value='0'>" + checkboxes[i].value + "</option>";
 				let val = {
 					email: checkboxes[i].id,
 					name: checkboxes[i].value
