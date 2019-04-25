@@ -87,7 +87,7 @@
 
 			})
 	checkQuorum();
-
+	//sup
 	}
 	function getCheckIn(){
 		let bigList = [];
@@ -98,7 +98,7 @@
 		let checkboxes = document.querySelectorAll(".cb");
 		for(let i = 0; i < checkboxes.length; i++){
 			if(checkboxes[i].checked){
-				ret += "<option class='present' id='" + checkboxes[i].id + "' value='" + checkboxes[i].value + "'>" + checkboxes[i].value + "</option>";
+				ret += "<option class='present' id='" + checkboxes[i].value.replace(" ", "") + "' value='" + checkboxes[i].value + "'>" + checkboxes[i].value + "</option>";
 				let val = {
 					email: checkboxes[i].id,
 					name: checkboxes[i].value
