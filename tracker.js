@@ -86,7 +86,7 @@
 
 			})
 	checkQuorum();
-
+	//sup
 	}
 	function getCheckIn(){
 		let bigList = [];
