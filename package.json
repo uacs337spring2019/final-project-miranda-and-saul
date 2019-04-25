@@ -4,8 +4,9 @@
   "description": "",
   "main": "tracker_service.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node tracker_service.js"
+    "start":"node tracker_service.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "repository": {
     "type": "git",
