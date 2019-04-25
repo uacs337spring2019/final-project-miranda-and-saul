@@ -84,7 +84,7 @@
 			headers : {'Accept': 'application/json','Content-Type' : 'application/json'},
 			body : JSON.stringify(bigList)
 		};
-		let url = "http://quorumtracker.herokuapp.com:process.env.PORT/?mode=update";
+		let url = "http://quorumtracker.herokuapp.com/?mode=update";
 		fetch(url, fetchOptions)
 			.then(checkStatus)
 			.then(function(responseText){
@@ -134,7 +134,7 @@
 			headers : {'Accept': 'application/json','Content-Type' : 'application/json'},
 			body : JSON.stringify(bigList)
 		};
-		let url = "http://quorumtracker.herokuapp.com:process.env.PORT/";
+		let url = "http://quorumtracker.herokuapp.com/";
 		fetch(url, fetchOptions)
 			.then(checkStatus)
 			.then(function(responseText){
@@ -328,7 +328,7 @@ present and gets the new total
 */
 function statistics(){
 	//console.log("here");
-	let url = "http://quorumtracker.herokuapp.com:process.env.PORT/?mode=graph";
+	let url = "http://quorumtracker.herokuapp.com/?mode=graph";
 	fetch(url)
 			.then(checkStatus)
 		    .then(function(responseText) {
@@ -344,7 +344,7 @@ This function gets the initial list of actives from a text file
 to use to make a list of checkboxes to check in those present
 */
 function initialList(){
-	let url = "http://quorumtracker.herokuapp.com:process.env.PORT/?mode=initial";
+	let url = "http://quorumtracker.herokuapp.com/?mode=initial";
 	fetch(url)
 			.then(checkStatus)
 		    .then(function(responseText) {
