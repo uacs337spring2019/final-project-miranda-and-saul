@@ -2,7 +2,7 @@
   "name": "csc-337-final-project",
   "version": "1.0.0",
   "description": "",
-  "main": "tracker.js",
+  "main": "tracker_service.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start":"node tracker_service.js"
