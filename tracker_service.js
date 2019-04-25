@@ -47,6 +47,14 @@ app.get('/', function (req, res) {
 		res.send(JSON.stringify(output));
 		
 	}
+	if (mode == "graph"){
+
+		let file_name =  "pastMeetings.txt";
+		let info_data = read_file(file_name);
+		output = parse_info(info_data);
+		console.log(output);
+		res.send(JSON.stringify(output));
+	}
 	
 
 
