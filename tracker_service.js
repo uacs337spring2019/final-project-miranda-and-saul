@@ -47,6 +47,9 @@ app.get('/', function (req, res) {
 		res.send(JSON.stringify(output));
 		
 	}
+	/*
+	This is used to get the data from past meeting attendance 
+	*/
 	if (mode == "graph"){
 
 		let file_name =  "pastMeetings.txt";
