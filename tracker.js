@@ -15,6 +15,7 @@
 		document.getElementById("personleft").onclick = personleft;
 		document.getElementById("lateperson").onclick = redisplay;
 		document.getElementById("resubmitrole").onclick = addLateBrother;
+		document.getElementById("endmeeting").onclick = statistics;
 	}
 
 	function redisplay(){
@@ -42,7 +43,7 @@
 		let checkboxes = document.querySelectorAll(".cl");
 		for(let i = 0; i < checkboxes.length; i++){
 			if(checkboxes[i].checked){
-				ret += "<option id='" + checkboxes[i].id + "' value='" + checkboxes[i].value + "'>" + checkboxes[i].value + "</option>";
+				ret += "<option class='present' id='" + checkboxes[i].id + "' value='" + checkboxes[i].value + "'>" + checkboxes[i].value + "</option>";
 				let val = {
 					email: checkboxes[i].id,
 					name: checkboxes[i].value
@@ -221,18 +222,106 @@ function makeChecklist(lis){
 		document.getElementById("checkboxes").appendChild(bar);
 	}
 }
+/*
+takes list and converts data to dictionary
+*/
+function makeDic(list){
+	let dic = {}
+	//console.log(list);
+	for(let i=0; i<list.length;i++){
+		//console.log(list[i]);
+		let data = list[i];
+		data = data.replace(/\t/g," ").replace("\r","");
+		//console.log(data);
+		let l = data.split(" ");
+		//console.log(l)
+		let num = parseInt(l[l.length-1]);
+		l.pop();
+		
+		let name = l[0]+" "+l[l.length-1];
+		console.log(name);
+		dic[name] = num;
 
+	}
+	//console.log(dic);
+	return dic;
+}
+/*
+Uses data from list and creates bar graph that displays the attendance 
+based on the 10 total meetings per semester and how many a member has gone to sofar.
+*/
+function makeGraph(list){
+	//console.log("b");
+	let dict = makeDic(list);
+	console.log("b");
+	var sorted = [];
+	for(var key in dict) {
+	    sorted[sorted.length] = key;
+	}
+	sorted.sort();
+	//console.log(sorted);
+	let inMeeting = document.getElementsByClassName('present');
+	console.log(inMeeting);
+	for (let i = 0; i < inMeeting.length; i++) {
+	  dict[inMeeting[i].value] += 1;
+	}
+	let color = true;
+	for(var j = 0; j < sorted.length; j++) {
+        let n = dict[sorted[j]];
+        let percent =  (n/(10))*100;
+        //console.log(percent);
+        let bar = document.createElement("div");
+        if(color){
+        	bar.className = "red"
+        	color = false;
+        }else{
+        	bar.className = "gold"
+        	color = true;
+        }
+        bar.style.width = (percent+100)+"%";
+        bar.innerHTML = sorted[j]+" "+n;
+        let outer = document.createElement("div");
+		
+		outer.appendChild(bar);
+        document.getElementById("endgame").appendChild(outer);
+
+    }
+    document.getElementById("init").style.display = "none";
+	document.getElementById("dropdown").style.display = "none";
+	document.getElementById("latelist").style.display = "none"
+	document.getElementById("endgame").style.display = "inline"
+
+
+
+}
+/*
+This fucntion pulls a file that has data on past meetings and adds that data to the those currently
+present and gets the new total
+*/
+function statistics(){
+	//console.log("here");
+	let url = "http://localhost:3000/?mode=graph";
+	fetch(url)
+			.then(checkStatus)
+		    .then(function(responseText) {
+		    	console.log("a");
+				let lis = JSON.parse(responseText);
+				makeGraph(lis);
+				
+		    })
+		    
+}
 function initialList(){
 	let url = "http://localhost:3000/?mode=initial";
 	fetch(url)
 			.then(checkStatus)
 		    .then(function(responseText) {
-		    	console.log("here");
+		    	//console.log("here");
 				let lis = JSON.parse(responseText);
 		        makeChecklist(lis);
 		    })
 		    .catch(function(error) {
-		        console.log("Blunder");
+		        console.log("ERROR");
 		});
 }
 
