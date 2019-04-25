@@ -2,6 +2,10 @@ body{
 	background-color: #EDEAB5;
 	color: #8B0000;
 	margin: 0;
+	font-size: 16pt;
+}
+input{
+	zoom: 1.5;
 }
 #coa{
 	position: fixed;
@@ -9,13 +13,34 @@ body{
 	right: 15px;
 	bottom: 15px;
 }
+.red, .gold {
+	height: 30px;
+	margin-bottom: 5px;
+	font-size: 20px;
+}
+.red{
+	color:white;
+	background-color: #8B0000;
+}
+.gold{
+	color:black;
+	background-color: #FFCC33;
+}
 #banner{
 	background-color: #FFCC33;
 	font-size: 50pt;
 	text-align: center;
 	border-bottom: solid 2px #8B0000;
 }
-
+.check{
+	font-size: 25px;
+}
+#latecheck{
+	font-size: 25px;
+}
+input[type=checkbox] {
+  transform: scale(2);
+}
 #banner img{
 	width: 10%;
 	vertical-align: bottom;
