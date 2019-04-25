@@ -38,8 +38,8 @@ input{
 #latecheck{
 	font-size: 25px;
 }
-input[type=checkbox] {
-  transform: scale(2);
+input{
+	zoom: 1.5;
 }
 #banner img{
 	width: 10%;
@@ -77,4 +77,8 @@ button{
 
 #current{
 	font-size: 15pt;
+}
+
+#endgame{
+	display: none;
 }

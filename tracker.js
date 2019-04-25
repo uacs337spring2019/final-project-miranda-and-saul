@@ -1,4 +1,4 @@
-//Miranda Hampton
+//Miranda Hampton & Saul Manzano
 //CSC 337
 //Due: 3/29/2019
 //This code uses node.js to read messages from a text file with names and comments. 
@@ -16,14 +16,18 @@
 		document.getElementById("lateperson").onclick = redisplay;
 		document.getElementById("resubmitrole").onclick = addLateBrother;
 		document.getElementById("endmeeting").onclick = statistics;
+		document.getElementById("back").onclick = back;
 	}
-
+	/*
+	This function is used to redisplay different divs after a button is clicked
+	*/
 	function redisplay(){
 		document.getElementById("init").style.display = "none";
 		document.getElementById("dropdown").style.display = "none";
 		document.getElementById("latelist").style.display = "inline";
 	}
 
+	//This function just checks to see if we have enough people in the room to run meeting
 	function checkQuorum(){
 		let e = document.getElementById("quorum").firstElementChild;
 		let q = parseInt(e.id);
@@ -32,7 +36,10 @@
 		else
 			e.style.color = "#00f21c";
 	}
-
+	/*
+	This function adds the ability to add people who show up to meeting late and 
+	need to be checked in
+	*/
 	function addLateBrother(){
 		let bigList = [];
 		let checkedB = [];
@@ -83,12 +90,12 @@
 			.then(function(responseText){
 			})
 			.catch(function(error){
-		//alert("something happened");
 
 			})
 	checkQuorum();
-	//sup
 	}
+
+	//this function finds all the people who checked in in the beginning 
 	function getCheckIn(){
 		let bigList = [];
 		let checkedB = [];
@@ -98,7 +105,7 @@
 		let checkboxes = document.querySelectorAll(".cb");
 		for(let i = 0; i < checkboxes.length; i++){
 			if(checkboxes[i].checked){
-				ret += "<option class='present' id='" + checkboxes[i].value.replace(" ", "") + "' value='" + checkboxes[i].value + "'>" + checkboxes[i].value + "</option>";
+				ret += "<option class='present' id='" + checkboxes[i].value.replace(" ", "") + "' value='0'>" + checkboxes[i].value + "</option>";
 				let val = {
 					email: checkboxes[i].id,
 					name: checkboxes[i].value
@@ -133,12 +140,13 @@
 			.then(function(responseText){
 			})
 			.catch(function(error){
-		//alert("something happened");
 
 			})
 	checkQuorum();
 	}
 
+//when a person leaves the room they are checked out. The quorum number is decreased 
+//and a timer is stsrted to keep track of how long they are gone for
 function personleft(){
 	let child = document.getElementById("quorum").firstElementChild;
 	child.id = parseInt(child.id) - 1;
@@ -186,7 +194,6 @@ function personleft(){
 	}, 1000);
 
 	hideDD(person.replace(" ", ""));
-	//select.options[select.selectedIndex].style.display = "none";
 	 timers[person.replace(" ", "")] = timer;
 	checkQuorum();
 
@@ -194,6 +201,8 @@ function personleft(){
 }
 
 
+//When a person comes back into the room, this function will add them back int the dropdown list
+//and adds them to the quorum number
 function checkBackIn(){
 	let personVal = parseInt(this.id);
 	let person = this.value;
@@ -208,7 +217,10 @@ function checkBackIn(){
 	checkQuorum();
 }
 
-
+/*
+Takes a list of all those who can be present at meeting
+and creates a list of checkboxes to be checked in
+*/
 function makeChecklist(lis){
 	for(let i=0;i<lis.length;i++){
 		let bar = document.createElement("div");
@@ -218,7 +230,18 @@ function makeChecklist(lis){
 		bar.idName = lis[i];
 		let d_name = whole.slice(0,whole.length-1).join(" ");
 		d_name = d_name.replace(/\uFEFF/g,"");
-		bar.innerHTML = "<input type='checkbox' name='attendance' id='"+val+"'' value='"+d_name+"'' class='cb' />" + d_name;
+		let l = document.createElement("LABEL");
+		l.setAttribute("for", val);
+  		let t = document.createTextNode(d_name);
+  		l.appendChild(t);
+  		let inp = document.createElement("input");
+  		inp.setAttribute("type", "checkbox");
+  		inp.setAttribute("name", "attendence");
+  		inp.id = val;
+  		inp.value = d_name;
+  		inp.classList.add("cb");
+  		bar.appendChild(inp);
+  		bar.appendChild(l);
 		document.getElementById("checkboxes").appendChild(bar);
 	}
 }
@@ -239,8 +262,10 @@ function makeDic(list){
 		l.pop();
 		
 		let name = l[0]+" "+l[l.length-1];
-		console.log(name);
+		//console.log(name);
+
 		dic[name] = num;
+		//console.log(dic[name], name);
 
 	}
 	//console.log(dic);
@@ -253,7 +278,8 @@ based on the 10 total meetings per semester and how many a member has gone to so
 function makeGraph(list){
 	//console.log("b");
 	let dict = makeDic(list);
-	console.log("b");
+	console.log(dict);
+	//console.log("b");
 	var sorted = [];
 	for(var key in dict) {
 	    sorted[sorted.length] = key;
@@ -261,9 +287,11 @@ function makeGraph(list){
 	sorted.sort();
 	//console.log(sorted);
 	let inMeeting = document.getElementsByClassName('present');
-	console.log(inMeeting);
+	//console.log(inMeeting);
 	for (let i = 0; i < inMeeting.length; i++) {
-	  dict[inMeeting[i].value] += 1;
+		
+	  dict[inMeeting[i].innerHTML] += 1;
+	  console.log(dict[inMeeting[i]],inMeeting[i] )
 	}
 	let color = true;
 	for(var j = 0; j < sorted.length; j++) {
@@ -311,6 +339,10 @@ function statistics(){
 		    })
 		    
 }
+/*
+This function gets the initial list of actives from a text file
+to use to make a list of checkboxes to check in those present
+*/
 function initialList(){
 	let url = "http://localhost:3000/?mode=initial";
 	fetch(url)
@@ -325,6 +357,9 @@ function initialList(){
 		});
 }
 
+
+//This function was just for physical appearance. 
+//It removes them from the dropdown but readds them so they aren't still selected
 function hideDD(person){
 	let s = document.getElementById("current");
 	for(let i = 0; i <s.length; i++){
@@ -341,6 +376,13 @@ function hideDD(person){
 		}
 	}
 
+}
+
+//This function just returns to the previous page
+function back(){
+
+	document.getElementById("dropdown").style.display = "inline";
+	document.getElementById("endgame").style.display = "none"
 }
 
 function checkStatus(response) {
