@@ -1,0 +1,8 @@
+{
+"name": "Quorum Counter",
+"description": "An app to help us count quorum during meetings",
+"repository": "https://github.com/samanzul/CSC-337-Final-Project.git",
+"logo": "https://rawgit.com/heroku/node-js-sample/master/public/node.svg"
+,
+"keywords": ["node", "express", "static"]
+}

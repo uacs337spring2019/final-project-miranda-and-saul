@@ -1,0 +1,19 @@
+{
+  "name": "csc-337-final-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tracker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samanzul/CSC-337-Final-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samanzul/CSC-337-Final-Project/issues"
+  },
+  "homepage": "https://github.com/samanzul/CSC-337-Final-Project#readme"
+}
