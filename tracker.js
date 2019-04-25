@@ -7,7 +7,7 @@
 
 (function(){
 	"use strict";
-
+	let timers = {};
 	window.onload = function(){
 		document.getElementById("latelist").style.display = "none";
 		initialList();
@@ -30,9 +30,6 @@
 			e.style.color = "#ff0000";
 		else
 			e.style.color = "#00f21c";
-
-
-
 	}
 
 	function addLateBrother(){
@@ -43,7 +40,6 @@
 		let lateList = "";
 		
 		let checkboxes = document.querySelectorAll(".cl");
-		console.log(checkboxes);
 		for(let i = 0; i < checkboxes.length; i++){
 			if(checkboxes[i].checked){
 				ret += "<option id='" + checkboxes[i].id + "' value='" + checkboxes[i].value + "'>" + checkboxes[i].value + "</option>";
@@ -64,10 +60,7 @@
 
 		let child = document.getElementById("quorum").firstElementChild;
 		let toAdd = checkedB.length;
-		console.log(toAdd);
-		console.log(child.id);
 		child.id = parseInt(child.id)+toAdd;
-		console.log(child.id);
 		child.innerHTML = child.id;
 		document.getElementById("latecheck").innerHTML = "";
 		document.getElementById("latecheck").innerHTML = lateList;
@@ -89,11 +82,11 @@
 			.then(function(responseText){
 			})
 			.catch(function(error){
-				alert("something happened");
+		//alert("something happened");
 
 			})
 	checkQuorum();
-
+	//sup
 	}
 	function getCheckIn(){
 		let bigList = [];
@@ -104,7 +97,7 @@
 		let checkboxes = document.querySelectorAll(".cb");
 		for(let i = 0; i < checkboxes.length; i++){
 			if(checkboxes[i].checked){
-				ret += "<option id='" + checkboxes[i].id + "' value='" + checkboxes[i].value + "'>" + checkboxes[i].value + "</option>";
+				ret += "<option id='" + checkboxes[i].value.replace(" ", "") + "' value='0'>" + checkboxes[i].value + "</option>";
 				let val = {
 					email: checkboxes[i].id,
 					name: checkboxes[i].value
@@ -139,7 +132,7 @@
 			.then(function(responseText){
 			})
 			.catch(function(error){
-				alert("something happened");
+		//alert("something happened");
 
 			})
 	checkQuorum();
@@ -150,25 +143,22 @@ function personleft(){
 	child.id = parseInt(child.id) - 1;
 	child.innerHTML = parseInt(child.id);
 	let select = document.getElementById("current");
-	let person = select.value;
-	select.remove(select.selectedIndex);
-	let now = new Date();
-	let untilmin = new Date(now.getTime() + 10*60000);
-	let e = document.getElementById("outofroom");
-	let len = e.childNodes.length;
-	untilmin = untilmin.getTime();
-	window.timer = setInterval(function(){
-		let curr = new Date().getTime();
-		let amt = untilmin - curr;
-		let min = Math.floor((amt%(3600000))/(60000));
-		let sec = Math.floor((amt%60000)/1000);
+	let person = select.options[select.selectedIndex].text;
+
+	let timer = setInterval(function(){
+		let e = document.getElementById("outofroom");
+		let time = parseInt(document.getElementById(person.replace(" ","")).value);
+		let min = parseInt(time/60);
+		let sec = time %60;
 		let div = document.getElementById("person" + person.replace(" ", ""));
 		if(div != null){
 			let span = document.getElementById("span" + person.replace(" ", ""));
 			span.innerHTML = min + " m " + sec + " s";
-			if(min > 1 && min < 5)
+			let btn = document.getElementById(time-1 + person.replace(" ", ""));
+			btn.id = time + person.replace(" ", "");
+			if(min > 5 && min < 9)
 				span.style.color = "#ffcc99";
-			else if(min > 0 && min < 2)
+			else if(min >= 9)
 				span.style.color = "#ff0000";
 
 		}
@@ -182,30 +172,38 @@ function personleft(){
 			div.appendChild(span);
 			let btn = document.createElement("button");
 			btn.innerHTML = "Check Back In"; 
+			btn.id = time +person.replace(" ", "");
 			btn.value = person;
 			btn.addEventListener("click", checkBackIn);
 			div.appendChild(btn);
 			e.appendChild(div);
 		}
-		if(min < 0){
-			clearInterval(timer);
-		}
+		time += 1;
+		document.getElementById(person.replace(" ","")).value = time;
+
 
 	}, 1000);
+
+	hideDD(person.replace(" ", ""));
+	//select.options[select.selectedIndex].style.display = "none";
+	 timers[person.replace(" ", "")] = timer;
 	checkQuorum();
 
 
 }
 
+
 function checkBackIn(){
-	let personVal = this.value;
-	let option = document.createElement("option");
-	option.text = personVal;
-	option.value = personVal;
-	document.getElementById("current").add(option);
-	let e = document.getElementById("person" + personVal.replace(" ", ""));
-	e.parentNode.removeChild(e);
-	clearInterval(timer);
+	let personVal = parseInt(this.id);
+	let person = this.value;
+	let child = document.getElementById("quorum").firstElementChild;
+	child.id = parseInt(child.id) + 1;
+	child.innerHTML = parseInt(child.id);
+	let option = document.getElementById(person.replace(" ", "")).style.display = "block";
+	let e = document.getElementById("person" + person.replace(" ", ""));
+	e.parentNode.removeChild(e)	
+	clearInterval(timers[person.replace(" ", "")]);
+	delete timers[personVal]
 	checkQuorum();
 }
 
@@ -231,12 +229,29 @@ function initialList(){
 		    .then(function(responseText) {
 		    	console.log("here");
 				let lis = JSON.parse(responseText);
-				console.log(lis);
 		        makeChecklist(lis);
 		    })
 		    .catch(function(error) {
 		        console.log("Blunder");
 		});
+}
+
+function hideDD(person){
+	let s = document.getElementById("current");
+	for(let i = 0; i <s.length; i++){
+		if(s.options[i].id == person){
+			let text = s.options[i].text;
+			let val = s.options[i].value;
+			s.remove(i);
+			let o = document.createElement("option");
+			o.text = text;
+			o.id = person;
+			o.value = val;
+			s.add(o);
+			o.style.display = "none";
+		}
+	}
+
 }
 
 function checkStatus(response) {
